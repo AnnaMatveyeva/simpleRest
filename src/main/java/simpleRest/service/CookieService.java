@@ -1,14 +1,12 @@
 package simpleRest.service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
+import simpleRest.exception.UserForbiddenException;
 
 @Service
 public class CookieService {
@@ -21,17 +19,22 @@ public class CookieService {
         response.addCookie(passCookie);
     }
 
-    public Map<String, String> getCookies(HttpServletRequest request) {
+    public Map<String, String> getCookies(HttpServletRequest request)
+        throws UserForbiddenException {
         Map<String, String> result = new HashMap<>();
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("username")) {
-                result.put("username", cookie.getValue());
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("username")) {
+                    result.put("username", cookie.getValue());
+                }
+                if (cookie.getName().equals("password")) {
+                    result.put("password", cookie.getValue());
+                }
             }
-            if (cookie.getName().equals("password")) {
-                result.put("password", cookie.getValue());
-            }
+            return result;
+        } else {
+            throw new UserForbiddenException();
         }
-        return result;
     }
 
 

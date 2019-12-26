@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "roles")
-public class Role extends AbstractEntity{
+public class Role extends AbstractEntity {
 
 }

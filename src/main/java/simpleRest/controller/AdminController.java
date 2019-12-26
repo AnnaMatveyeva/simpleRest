@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import simpleRest.exception.UserForbiddenException;
 import simpleRest.service.UserService;
 
 @RestController
@@ -18,16 +19,16 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getAdmin(@RequestParam(required = false) String username,
-        @RequestParam(required = false) String password, HttpServletResponse response) {
+        @RequestParam(required = false) String password, HttpServletResponse response)
+        throws IOException {
         final long start = System.currentTimeMillis();
-        if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
-            userService.authentication(username, password, response, 2L);
-        } else {
-            try {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            if (username != null && password != null && !username.isEmpty() && !password
+                .isEmpty()) {
+                userService.userAuthentication(username, password, "ADMIN");
             }
+        } catch (UserForbiddenException ex) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
         final long executionTime = System.currentTimeMillis() - start;
         logger.info("response time: " + executionTime + "ms;");
