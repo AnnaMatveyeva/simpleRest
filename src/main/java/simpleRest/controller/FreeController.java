@@ -15,7 +15,7 @@ public class FreeController {
         final long start = System.currentTimeMillis();
         final long executionTime = System.currentTimeMillis() - start;
         logger.info(
-            "UID: " + UUID.randomUUID().toString() + "; response time: " + executionTime + "ms;");
+            "UID: " + UUID.randomUUID() + "; response time: " + executionTime + "ms;");
         return "It is for free"; //add string generator
     }
 }

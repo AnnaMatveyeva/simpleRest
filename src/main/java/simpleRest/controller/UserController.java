@@ -29,13 +29,13 @@ public class UserController {
         HttpServletResponse response, HttpServletRequest request) {
 
         final long start = System.currentTimeMillis();
-        if (username != null && password != null) {
-            userService.authentication(username, password, response, 1L);
+        if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
+            userService.authentication(username, password, response, 2L);
 
         } else {
             Map<String, String> cookies = cookieService.getCookies(request);
             userService
-                .authentication(cookies.get("username"), cookies.get("password"), response, 1L);
+                .authentication(cookies.get("username"), cookies.get("password"), response, 2L);
         }
         final long executionTime = System.currentTimeMillis() - start;
         logger.info(

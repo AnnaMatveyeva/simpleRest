@@ -31,7 +31,7 @@ public class UserService {
 
     public User getUser(String username) {
         User user = new User();
-        user.setUsername(username);
+        user.setName(username);
         Example<User> example = Example.of(user);
         return userRepo.findOne(example).get();
     }
@@ -70,13 +70,13 @@ public class UserService {
 
     public User createUser(String username, String password, HttpServletResponse response) {
         User user = new User();
-        user.setUsername(username);
+        user.setName(username);
 
         try {
             user.setPassword(coder(password).toString());
             user.setRole(getRoleById(1L));
             save(user);
-            cookieService.setCookie(user.getUsername(), user.getPassword(), response);
+            cookieService.setCookie(user.getName(), user.getPassword(), response);
             return user;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

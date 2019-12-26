@@ -20,7 +20,7 @@ public class AdminController {
     public String getAdmin(@RequestParam(required = false) String username,
         @RequestParam(required = false) String password, HttpServletResponse response) {
         final long start = System.currentTimeMillis();
-        if (username != null && password != null) {
+        if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
             userService.authentication(username, password, response, 2L);
         } else {
             try {
