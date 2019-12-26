@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import simpleRest.util.StringGenerator;
 
 @RestController
 public class FreeController {
@@ -16,6 +17,6 @@ public class FreeController {
         final long executionTime = System.currentTimeMillis() - start;
         logger.info(
             "UID: " + UUID.randomUUID() + "; response time: " + executionTime + "ms;");
-        return "It is for free"; //add string generator
+        return StringGenerator.getRandomString(); //add string generator
     }
 }

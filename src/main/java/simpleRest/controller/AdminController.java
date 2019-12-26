@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import simpleRest.exception.UserForbiddenException;
 import simpleRest.service.UserService;
+import simpleRest.util.StringGenerator;
 
 @RestController
 public class AdminController {
@@ -32,6 +33,6 @@ public class AdminController {
         }
         final long executionTime = System.currentTimeMillis() - start;
         logger.info("response time: " + executionTime + "ms;");
-        return "hello" + username;
+        return StringGenerator.getRandomString();
     }
 }

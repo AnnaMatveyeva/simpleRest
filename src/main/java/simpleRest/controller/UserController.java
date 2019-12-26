@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import simpleRest.exception.UserForbiddenException;
 import simpleRest.service.CookieService;
 import simpleRest.service.UserService;
+import simpleRest.util.StringGenerator;
 
 @RestController
 public class UserController {
@@ -46,8 +47,8 @@ public class UserController {
         }
         final long executionTime = System.currentTimeMillis() - start;
         logger.info(
-            "UID: " + UUID.randomUUID().toString() + "; response time: " + executionTime + "ms;");
-        return "hello user";
+            "UID: " + UUID.randomUUID() + "; response time: " + executionTime + "ms;");
+        return StringGenerator.getRandomString();
     }
 
 
