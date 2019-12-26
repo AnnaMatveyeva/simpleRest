@@ -16,6 +16,7 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
     private static final Logger logger = Logger.getLogger(AdminController.class.getName());
 
     @GetMapping("/admin")
@@ -23,14 +24,18 @@ public class AdminController {
         @RequestParam(required = false) String password, HttpServletResponse response)
         throws IOException {
         final long start = System.currentTimeMillis();
-        try {
-            if (username != null && password != null && !username.isEmpty() && !password
-                .isEmpty()) {
+
+        if (username != null && password != null && !username.isEmpty() && !password
+            .isEmpty()) {
+            try {
                 userService.userAuthentication(username, password, "ADMIN");
+            } catch (UserForbiddenException ex) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
-        } catch (UserForbiddenException ex) {
+        } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
+
         final long executionTime = System.currentTimeMillis() - start;
         logger.info("response time: " + executionTime + "ms;");
         return StringGenerator.getRandomString();

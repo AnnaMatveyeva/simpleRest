@@ -35,7 +35,7 @@ public class UserService {
             .getName()
             .equals(role)) {
             return user;
-        } else if (user == null) {
+        } else if (user == null && !role.equals("ADMIN")) {
             user = createUser(username, password);
             return user;
         }
