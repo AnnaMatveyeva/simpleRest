@@ -1,27 +1,21 @@
 package simpleRest.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import simpleRest.entity.User;
 import simpleRest.exception.UserForbiddenException;
 import simpleRest.repository.RoleRepository;
 import simpleRest.repository.UserRepository;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private CookieService cookieService;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepo;
+    private final RoleRepository roleRepository;
+    private final CookieService cookieService;
+    private final PasswordEncoder passwordEncoder;
 
     public User save(User user) {
         userRepo.saveAndFlush(user);

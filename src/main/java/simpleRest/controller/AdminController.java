@@ -1,23 +1,22 @@
 package simpleRest.controller;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import simpleRest.exception.UserForbiddenException;
 import simpleRest.service.UserService;
-import simpleRest.util.StringGenerator;
 
 @RestController
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    private UserService userService;
-
-    private static final Logger logger = Logger.getLogger(AdminController.class.getName());
+    private static final Logger logger = Logger.getLogger(AdminController.class);
+    private final UserService userService;
 
     @GetMapping("/admin")
     public String getAdmin(@RequestParam(required = false) String username,
@@ -38,6 +37,6 @@ public class AdminController {
 
         final long executionTime = System.currentTimeMillis() - start;
         logger.info("response time: " + executionTime + "ms;");
-        return StringGenerator.getRandomString();
+        return RandomStringUtils.randomAlphabetic(15);
     }
 }
