@@ -17,15 +17,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationService authService;
 
+    public User findByName(String username) {
+        return userRepo.findByName(username);
+    }
+
     public User userAuthentication(String username, String password, String role)
         throws UserForbiddenException {
-        return authService
-            .userAuthentication(username, password, role, this);
+        return authService.userAuthentication(username, password, role, this);
     }
 
     public User cookieAuthentication(String username, String password)
         throws UserForbiddenException {
-        return authService.cookieAuthentication(username, password);
+        return authService.cookieAuthentication(username, password, this);
     }
 
     public User createUser(String username, String password) {
@@ -34,6 +37,5 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(roleRepository.findByName("USER"));
         return userRepo.save(user);
-
     }
 }
