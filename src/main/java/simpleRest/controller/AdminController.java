@@ -19,15 +19,14 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getAdmin(@RequestParam(required = false) String username,
-        @RequestParam(required = false) String password)
-        throws UserForbiddenException {
+        @RequestParam(required = false) String password) throws UserForbiddenException {
         final long start = System.currentTimeMillis();
 
         if (StringUtils.isNoneEmpty(username) && StringUtils.isNoneEmpty(password)) {
 
             userService.userAuthentication(username, password, "ADMIN");
         } else {
-            throw new UserForbiddenException();
+            throw new UserForbiddenException("User forbidden");
         }
 
         final long executionTime = System.currentTimeMillis() - start;

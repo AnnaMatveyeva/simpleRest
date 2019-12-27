@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Bad credentials")
 public class UserForbiddenException extends Exception {
 
-    public UserForbiddenException() {
-        super("User forbidden");
+    public UserForbiddenException(String message) {
+        super(message);
     }
 }

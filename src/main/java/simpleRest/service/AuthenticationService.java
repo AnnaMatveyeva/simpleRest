@@ -27,7 +27,7 @@ public class AuthenticationService {
             user = userService.createUser(username, password);
             return user;
         }
-        throw new UserForbiddenException();
+        throw new UserForbiddenException("User forbidden");
     }
 
     public User cookieAuthentication(String username, String password)
@@ -37,7 +37,7 @@ public class AuthenticationService {
             .equals("USER")) {
             return user;
         } else {
-            throw new UserForbiddenException();
+            throw new UserForbiddenException("User forbidden");
         }
     }
 }

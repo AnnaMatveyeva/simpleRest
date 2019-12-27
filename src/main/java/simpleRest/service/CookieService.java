@@ -33,7 +33,7 @@ public class CookieService {
             }
             return result;
         } else {
-            throw new UserForbiddenException();
+            throw new UserForbiddenException("User forbidden");
         }
     }
 
