@@ -1,9 +1,8 @@
 package simpleRest.controller;
 
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,19 +19,15 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String getAdmin(@RequestParam(required = false) String username,
-        @RequestParam(required = false) String password, HttpServletResponse response)
-        throws IOException {
+        @RequestParam(required = false) String password)
+        throws UserForbiddenException {
         final long start = System.currentTimeMillis();
 
-        if (username != null && password != null && !username.isEmpty() && !password
-            .isEmpty()) {
-            try {
-                userService.userAuthentication(username, password, "ADMIN");
-            } catch (UserForbiddenException ex) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            }
+        if (StringUtils.isNoneEmpty(username) && StringUtils.isNoneEmpty(password)) {
+
+            userService.userAuthentication(username, password, "ADMIN");
         } else {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            throw new UserForbiddenException();
         }
 
         final long executionTime = System.currentTimeMillis() - start;

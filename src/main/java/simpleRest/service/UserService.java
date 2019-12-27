@@ -14,37 +14,18 @@ public class UserService {
 
     private final UserRepository userRepo;
     private final RoleRepository roleRepository;
-    private final CookieService cookieService;
     private final PasswordEncoder passwordEncoder;
-
-    public User save(User user) {
-        userRepo.saveAndFlush(user);
-        return user;
-    }
+    private final AuthenticationService authService;
 
     public User userAuthentication(String username, String password, String role)
         throws UserForbiddenException {
-        User user = userRepo.findByName(username);
-        if (user != null && passwordEncoder.matches(password, user.getPassword()) && user.getRole()
-            .getName()
-            .equals(role)) {
-            return user;
-        } else if (user == null && !role.equals("ADMIN")) {
-            user = createUser(username, password);
-            return user;
-        }
-        throw new UserForbiddenException();
+        return authService
+            .userAuthentication(username, password, role, this);
     }
 
     public User cookieAuthentication(String username, String password)
         throws UserForbiddenException {
-        User user = userRepo.findByName(username);
-        if (user != null && user.getPassword().equals(password) && user.getRole().getName()
-            .equals("USER")) {
-            return user;
-        } else {
-            throw new UserForbiddenException();
-        }
+        return authService.cookieAuthentication(username, password);
     }
 
     public User createUser(String username, String password) {
@@ -52,8 +33,7 @@ public class UserService {
         user.setName(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(roleRepository.findByName("USER"));
-        save(user);
-        return user;
+        return userRepo.save(user);
 
     }
 }

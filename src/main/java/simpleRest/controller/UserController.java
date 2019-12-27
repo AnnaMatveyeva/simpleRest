@@ -1,12 +1,12 @@
 package simpleRest.controller;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,21 +28,19 @@ public class UserController {
     public String getUser(
         @RequestParam(required = false) @CookieValue(value = "username", defaultValue = "username") String username,
         @RequestParam(required = false) @CookieValue(value = "password", defaultValue = "password") String password,
-        HttpServletResponse response, HttpServletRequest request) throws IOException {
+        HttpServletResponse response, HttpServletRequest request)
+        throws UserForbiddenException {
+
         final long start = System.currentTimeMillis();
-        try {
-            if (username != null && password != null && !username.isEmpty() && !password
-                .isEmpty()) {
-                String codePass = userService.userAuthentication(username, password, "USER")
-                    .getPassword();
-                cookieService.setCookie(username, codePass, response);
-            } else {
-                Map<String, String> cookies = cookieService.getCookies(request);
-                userService.cookieAuthentication(cookies.get("username"), cookies.get("password"));
-            }
-        } catch (UserForbiddenException ex) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        if (StringUtils.isNoneEmpty(username) && StringUtils.isNoneEmpty(password)) {
+            String codePass = userService.userAuthentication(username, password, "USER")
+                .getPassword();
+            cookieService.setCookie(username, codePass, response);
+        } else {
+            Map<String, String> cookies = cookieService.getCookies(request);
+            userService.cookieAuthentication(cookies.get("username"), cookies.get("password"));
         }
+
         final long executionTime = System.currentTimeMillis() - start;
         logger.info(
             "UID: " + UUID.randomUUID() + "; response time: " + executionTime + "ms;");
